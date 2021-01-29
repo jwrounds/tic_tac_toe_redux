@@ -3,6 +3,7 @@ require_relative '../lib/tic_tac_toe_board.rb'
 
 class Game
   attr_reader :three_in_row, :full
+  
   def initialize 
     @three_in_row = false
     @full = false

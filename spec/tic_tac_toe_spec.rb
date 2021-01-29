@@ -44,3 +44,37 @@ describe Game do
     end
   end
 end
+
+describe Board do
+  subject(:game_board) { described_class.new }
+
+  describe '.place_token' do
+    context 'when it is a player turn' do
+      it 'adds a player token to the board' do
+        symbol = 'X'
+        row = 0
+        column = 1
+        expect { game_board.place_token(symbol, row, column) }.to change { game_board.instance_variable_get(:@board) }
+      end
+    end
+  end
+end
+
+describe Player do
+  subject(:player) { described_class.new 'X' }
+
+  describe '.make_move' do
+    context 'when the player plays a token' do
+      it 'calls .place_token on board object' do
+        board = instance_double('Board')
+        symbol = player.instance_variable_get(:@symbol)
+        coordinates = '01'
+        row = 0
+        column = 1
+
+        expect(board).to receive(:place_token).with(symbol, row, column)
+        player.make_move board, coordinates
+      end
+    end
+  end
+end
