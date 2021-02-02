@@ -23,23 +23,23 @@ describe Game do
 
   describe '.check_row' do
     subject(:game) { described_class.new }
-    let(:board) { Board.new }
-    let(:player) { Player.new 'X' } 
 
     context 'when a row is filled with X or O' do
       before do
-        player.make_move(board, 00)
-        player.make_move(board, 01)
-        player.make_move(board, 02)
+        board = game.instance_variable_get(:@board)
+        player = Player.new 'X'
+        player.make_move(board, '00')
+        player.make_move(board, '01')
+        player.make_move(board, '02')
       end
-      it 'changes @three_in_row to true' do
-        expect{ game.check_row }.to change { game.instance_variable_get(:@three_in_row) }
+      it 'changes @three_in_row to X or O' do
+        expect{ game.check_row(0) }.to change { game.instance_variable_get(:@three_in_row) }
       end
     end
     
     context 'when no row is filled with X or O' do
       it 'does not change @three_in_row' do
-        expect{ game.check_row }.not_to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_row(0) }.not_to change { game.instance_variable_get(:@three_in_row) }
       end
     end
   end
@@ -54,7 +54,7 @@ describe Board do
         symbol = 'X'
         row = 0
         column = 1
-        expect { game_board.place_token(symbol, row, column) }.to change { game_board.instance_variable_get(:@board) }
+        expect { game_board.place_token(symbol, row, column) }.to change { game_board.instance_variable_get(:@spaces) }
       end
     end
   end

@@ -1,11 +1,11 @@
 class Board
-  attr_reader :board
+  attr_reader :spaces
   def initialize 
-    @board = build_board
+    @spaces = build_board
   end
 
   def place_token symbol, row, column
-    board[row][column] = symbol
+    spaces[row][column] = symbol
   end
 
   def build_board
