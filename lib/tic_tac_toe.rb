@@ -41,5 +41,32 @@ class Game
     @three_in_row = memo
   end
 
+  def check_diagonal
+    row = 0
+    column = 0
+    memo = spaces[row][column]
+    2.times do
+      row += 1
+      column += 1
+      new_space = spaces[row][column]
+      new_space == memo ? memo = new_space : memo = false
+    end
+
+    if memo 
+      return @three_in_row = memo
+    else
+      row = 0
+      column = 2
+      memo = spaces[row][column]
+      2.times do
+        row += 1
+        column -= 1
+        new_space = spaces[row][column]
+        new_space == memo ? memo = new_space : memo = false
+      end
+      return @three_in_row = memo
+    end
+  end
+
 end
 

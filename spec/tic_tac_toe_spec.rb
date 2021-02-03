@@ -74,9 +74,9 @@ describe Game do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'O'
-        player.make_move(board, '00')
+        player.make_move(board, '02')
         player.make_move(board, '11')
-        player.make_move(board, '22')
+        player.make_move(board, '20')
       end
       it 'changes @three_in_row to X or O' do
         expect{ game.check_diagonal }.to change { game.instance_variable_get(:@three_in_row) }
