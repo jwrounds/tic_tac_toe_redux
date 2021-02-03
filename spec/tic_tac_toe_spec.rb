@@ -43,6 +43,29 @@ describe Game do
       end
     end
   end
+
+  describe '.check_column' do
+    subject(:game) { described_class.new }
+
+    context 'when a column is filled with X or O' do
+      before do
+        board = game.instance_variable_get(:@board)
+        player = Player.new 'X'
+        player.make_move(board, '00')
+        player.make_move(board, '10')
+        player.make_move(board, '20')
+      end
+      it 'changes @three_in_row to X or O' do
+        expect{ game.check_column(0) }.to change { game.instance_variable_get(:@three_in_row) }
+      end 
+    end
+
+    context 'when no column is filled with X or O' do
+      it 'does not change @three_in_row' do
+        expect{ game.check_column(0) }.not_to change { game.instance_variable_get(:@three_in_row) }
+      end
+    end
+  end
 end
 
 describe Board do

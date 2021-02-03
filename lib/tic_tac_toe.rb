@@ -27,8 +27,11 @@ class Game
       new_space = spaces[row][column]
       new_space == memo ? memo = new_space : memo = false
     end
-    p memo
     @three_in_row = memo
+  end
+
+  def check_column column
+
   end
 
 end
