@@ -31,7 +31,14 @@ class Game
   end
 
   def check_column column
-
+    row = 0
+    memo = spaces[row][column]
+    2.times do 
+      row += 1
+      new_space = spaces[row][column]
+      new_space == memo ? memo = new_space : memo = false
+    end
+    @three_in_row = memo
   end
 
 end

@@ -66,6 +66,29 @@ describe Game do
       end
     end
   end
+
+  describe '.check_diagonal' do
+    subject(:game) { described_class.new }
+
+    context 'when diagonal spaces are filled with X or O' do
+      before do
+        board = game.instance_variable_get(:@board)
+        player = Player.new 'O'
+        player.make_move(board, '00')
+        player.make_move(board, '11')
+        player.make_move(board, '22')
+      end
+      it 'changes @three_in_row to X or O' do
+        expect{ game.check_diagonal }.to change { game.instance_variable_get(:@three_in_row) }
+      end
+    end
+
+    context 'when diagnoal spaces are not filled with X or O' do
+      it 'does not change @three_in_row' do
+        expect{ game.check_diagonal }.not_to change { game.instance_variable_get(:@three_in_row) }
+      end
+    end
+  end
 end
 
 describe Board do
