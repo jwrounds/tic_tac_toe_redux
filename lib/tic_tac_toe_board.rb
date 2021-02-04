@@ -16,7 +16,7 @@ class Board
     spaces.each do |row|
       row_display = ""
       row.each do |space|
-        space ? row_display += `_#{space}_|` : row_display += "___|"
+        space ? row_display += "_#{space}_|" : row_display += "___|"
       end
       puts row_display
     end

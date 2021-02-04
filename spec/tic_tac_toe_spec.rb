@@ -11,8 +11,8 @@ describe Game do
       it { is_expected.to be_game_over }
     end
 
-    context 'when there is no winner, and at least one space open' do
-      it { is_expected.not_to be_game_over }
+    context 'when there is no winner' do
+      it { is_expected.to receive(:check_full); game.game_over? }
     end
   end
 
@@ -39,7 +39,6 @@ describe Game do
         expect(game.check_full).to eq(false)
       end
     end
-
   end
 
   describe '.check_three_in_row' do
