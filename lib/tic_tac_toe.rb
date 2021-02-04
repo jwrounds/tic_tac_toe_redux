@@ -3,20 +3,32 @@ require_relative '../lib/tic_tac_toe_board.rb'
 
 class Game
   attr_reader :board
-  attr_accessor :full, :three_in_row
+  attr_accessor :winner
 
   def initialize(board: Board.new) 
-    @three_in_row = false
-    @full = false
+    @winner = false
     @board = board
   end
 
   def game_over? 
-    three_in_row || full ? true : false
+    winner || check_full ? true : false
   end
 
   def spaces
     board.spaces
+  end
+
+  def check_full
+    spaces.each do |row|
+      return false if row.include?(false)
+    end
+    true
+  end
+
+  def check_winner
+    check_row
+    check_column
+    check_diagonal
   end
 
   def check_row
@@ -32,7 +44,14 @@ class Game
     check_three_in_row(diagonal_right: true, start_y: 2)
   end
 
-  def check_three_in_row(row: false, column: false, diagonal_left: false, diagonal_right: false, start_x: 0, start_y: 0)
+  def check_three_in_row(
+                          row: false, 
+                          column: false, 
+                          diagonal_left: false, 
+                          diagonal_right: false, 
+                          start_x: 0, 
+                          start_y: 0
+                        )
     x = start_x
     y = start_y
     memo = spaces[x][y]
@@ -55,8 +74,7 @@ class Game
       new_space = spaces[x][y]
       new_space == memo ? memo = new_space : memo = false
     end
-    @three_in_row = memo if memo
+    @winner = memo if memo
   end
 
 end
-

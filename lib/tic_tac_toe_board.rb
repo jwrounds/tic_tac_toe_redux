@@ -12,4 +12,14 @@ class Board
     Array.new(3) {Array.new(3, false)}
   end
 
+  def print_board
+    spaces.each do |row|
+      row_display = ""
+      row.each do |space|
+        space ? row_display += `_#{space}_|` : row_display += "___|"
+      end
+      puts row_display
+    end
+  end
+
 end

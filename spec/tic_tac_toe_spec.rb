@@ -6,19 +6,40 @@ describe Game do
   describe '.game_over?' do
     subject(:game) { described_class.new }
 
-    context 'when there are three in a row' do
-      before { game.instance_variable_set(:@three_in_row, true) }
+    context 'when there is a winner' do
+      before { game.instance_variable_set(:@winner, true) }
       it { is_expected.to be_game_over }
     end
 
-    context 'when the board is full' do
-      before { game.instance_variable_set(:@full, true) }
-      it { is_expected.to be_game_over }
-    end
-
-    context 'when there are not three in a row, and at least one space open' do
+    context 'when there is no winner, and at least one space open' do
       it { is_expected.not_to be_game_over }
     end
+  end
+
+  describe '.check_full' do
+    subject(:game) { described_class.new }
+
+    context 'when the board is full' do
+      before do
+        board = game.instance_variable_get(:@board)
+        player = Player.new 'X'
+        3.times do |i|
+          3.times do |j| 
+            player.make_move(board, "#{i}#{j}")
+          end
+        end
+      end
+      it 'returns true' do
+        expect(game.check_full).to eq(true)
+      end
+    end
+
+    context 'when there is at least one space open' do
+      it 'does not return true' do
+        expect(game.check_full).to eq(false)
+      end
+    end
+
   end
 
   describe '.check_three_in_row' do
@@ -32,14 +53,14 @@ describe Game do
         player.make_move(board, '11')
         player.make_move(board, '12')
       end
-      it 'changes @three_in_row to X or O' do
-        expect{ game.check_three_in_row(row: true, start_x: 1) }.to change { game.instance_variable_get(:@three_in_row) }
+      it 'changes @winner to X or O' do
+        expect{ game.check_three_in_row(row: true, start_x: 1) }.to change { game.instance_variable_get(:@winner) }
       end
     end
     
     context 'when no row is filled with X or O' do
-      it 'does not change @three_in_row' do
-        expect{ game.check_three_in_row(row: true, start_x: 1) }.not_to change { game.instance_variable_get(:@three_in_row) }
+      it 'does not change @winner' do
+        expect{ game.check_three_in_row(row: true, start_x: 1) }.not_to change { game.instance_variable_get(:@winner) }
       end
     end
 
@@ -51,14 +72,14 @@ describe Game do
         player.make_move(board, '10')
         player.make_move(board, '20')
       end
-      it 'changes @three_in_row to X or O' do
-        expect{ game.check_three_in_row(column: true) }.to change { game.instance_variable_get(:@three_in_row) }
+      it 'changes @winner to X or O' do
+        expect{ game.check_three_in_row(column: true) }.to change { game.instance_variable_get(:@winner) }
       end 
     end
 
     context 'when no column is filled with X or O' do
-      it 'does not change @three_in_row' do
-        expect{ game.check_three_in_row(column: true) }.not_to change { game.instance_variable_get(:@three_in_row) }
+      it 'does not change @winner' do
+        expect{ game.check_three_in_row(column: true) }.not_to change { game.instance_variable_get(:@winner) }
       end
     end
 
@@ -70,14 +91,14 @@ describe Game do
         player.make_move(board, '11')
         player.make_move(board, '22')
       end
-      it 'changes @three_in_row to X or O' do
-        expect{ game.check_three_in_row(diagonal_left: true) }.to change { game.instance_variable_get(:@three_in_row) }
+      it 'changes @winner to X or O' do
+        expect{ game.check_three_in_row(diagonal_left: true) }.to change { game.instance_variable_get(:@winner) }
       end
     end
 
     context 'when diagnoal spaces are not filled with X or O' do
-      it 'does not change @three_in_row' do
-        expect{ game.check_three_in_row(diagonal_left: true) }.not_to change { game.instance_variable_get(:@three_in_row) }
+      it 'does not change @winner' do
+        expect{ game.check_three_in_row(diagonal_left: true) }.not_to change { game.instance_variable_get(:@winner) }
       end
     end
   end
