@@ -19,53 +19,43 @@ class Game
     board.spaces
   end
 
-  def check_row row
-    column = 0
-    memo = spaces[row][column]
-    2.times do 
-      column += 1
-      new_space = spaces[row][column]
-      new_space == memo ? memo = new_space : memo = false
-    end
-    @three_in_row = memo
+  def check_row
+    3.times {|i| check_three_in_row(row: true, start_x: i)} 
   end
 
-  def check_column column
-    row = 0
-    memo = spaces[row][column]
-    2.times do 
-      row += 1
-      new_space = spaces[row][column]
-      new_space == memo ? memo = new_space : memo = false
-    end
-    @three_in_row = memo
+  def check_column 
+    3.times {|i| check_three_in_row(column: true, start_y: i)}
   end
 
   def check_diagonal
-    row = 0
-    column = 0
-    memo = spaces[row][column]
-    2.times do
-      row += 1
-      column += 1
-      new_space = spaces[row][column]
+    check_three_in_row(diagonal_left: true)
+    check_three_in_row(diagonal_right: true, start_y: 2)
+  end
+
+  def check_three_in_row(row: false, column: false, diagonal_left: false, diagonal_right: false, start_x: 0, start_y: 0)
+    x = start_x
+    y = start_y
+    memo = spaces[x][y]
+
+    2.times do 
+
+      case 
+        when row
+          y += 1
+        when column
+          x += 1
+        when diagonal_left
+          x += 1
+          y += 1
+        when diagonal_right
+          x += 1
+          y -= 1
+      end
+
+      new_space = spaces[x][y]
       new_space == memo ? memo = new_space : memo = false
     end
-
-    if memo 
-      return @three_in_row = memo
-    else
-      row = 0
-      column = 2
-      memo = spaces[row][column]
-      2.times do
-        row += 1
-        column -= 1
-        new_space = spaces[row][column]
-        new_space == memo ? memo = new_space : memo = false
-      end
-      return @three_in_row = memo
-    end
+    @three_in_row = memo if memo
   end
 
 end

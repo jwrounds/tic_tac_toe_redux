@@ -21,31 +21,27 @@ describe Game do
     end
   end
 
-  describe '.check_row' do
+  describe '.check_three_in_row' do
     subject(:game) { described_class.new }
 
     context 'when a row is filled with X or O' do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'X'
-        player.make_move(board, '00')
-        player.make_move(board, '01')
-        player.make_move(board, '02')
+        player.make_move(board, '10')
+        player.make_move(board, '11')
+        player.make_move(board, '12')
       end
       it 'changes @three_in_row to X or O' do
-        expect{ game.check_row(0) }.to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(row: true, start_x: 1) }.to change { game.instance_variable_get(:@three_in_row) }
       end
     end
     
     context 'when no row is filled with X or O' do
       it 'does not change @three_in_row' do
-        expect{ game.check_row(0) }.not_to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(row: true, start_x: 1) }.not_to change { game.instance_variable_get(:@three_in_row) }
       end
     end
-  end
-
-  describe '.check_column' do
-    subject(:game) { described_class.new }
 
     context 'when a column is filled with X or O' do
       before do
@@ -56,36 +52,32 @@ describe Game do
         player.make_move(board, '20')
       end
       it 'changes @three_in_row to X or O' do
-        expect{ game.check_column(0) }.to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(column: true) }.to change { game.instance_variable_get(:@three_in_row) }
       end 
     end
 
     context 'when no column is filled with X or O' do
       it 'does not change @three_in_row' do
-        expect{ game.check_column(0) }.not_to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(column: true) }.not_to change { game.instance_variable_get(:@three_in_row) }
       end
     end
-  end
-
-  describe '.check_diagonal' do
-    subject(:game) { described_class.new }
 
     context 'when diagonal spaces are filled with X or O' do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'O'
-        player.make_move(board, '02')
+        player.make_move(board, '00')
         player.make_move(board, '11')
-        player.make_move(board, '20')
+        player.make_move(board, '22')
       end
       it 'changes @three_in_row to X or O' do
-        expect{ game.check_diagonal }.to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(diagonal_left: true) }.to change { game.instance_variable_get(:@three_in_row) }
       end
     end
 
     context 'when diagnoal spaces are not filled with X or O' do
       it 'does not change @three_in_row' do
-        expect{ game.check_diagonal }.not_to change { game.instance_variable_get(:@three_in_row) }
+        expect{ game.check_three_in_row(diagonal_left: true) }.not_to change { game.instance_variable_get(:@three_in_row) }
       end
     end
   end

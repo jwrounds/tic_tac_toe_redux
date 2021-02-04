@@ -1,9 +1,8 @@
 class Player
-  attr_reader :turn, :symbol
+  attr_reader :symbol
 
   def initialize symbol
     @symbol = symbol
-    @turn = false
   end
 
   def make_move board, coord
