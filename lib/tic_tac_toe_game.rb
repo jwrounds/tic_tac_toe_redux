@@ -104,8 +104,4 @@ class Game
     end
     puts winner ? "\n#{active_player.symbol} Wins!" : "Tie game!"
   end
-
 end
-
-game = Game.new
-game.run_turn

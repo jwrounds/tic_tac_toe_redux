@@ -8,6 +8,14 @@ class Board
     spaces[row][column] = symbol
   end
 
+  def validate_input row, column
+    if (row >= 0 && row <= 2) || (column >= 0 && column <= 2)
+      spaces[row][column] ? false : true
+    else 
+      return false
+    end
+  end
+
   def build_board
     Array.new(3) {Array.new(3, false)}
   end
@@ -21,5 +29,4 @@ class Board
       puts row_display
     end
   end
-
 end

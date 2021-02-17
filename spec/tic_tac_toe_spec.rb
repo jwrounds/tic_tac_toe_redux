@@ -1,4 +1,4 @@
-require_relative '../lib/tic_tac_toe.rb'
+require_relative '../lib/tic_tac_toe_game.rb'
 require_relative '../lib/tic_tac_toe_player.rb'
 require_relative '../lib/tic_tac_toe_board.rb'
 
@@ -25,7 +25,7 @@ describe Game do
         player = Player.new 'X'
         3.times do |i|
           3.times do |j| 
-            player.make_move(board, "#{i}#{j}")
+            player.make_move(board, i, j)
           end
         end
       end
@@ -48,12 +48,13 @@ describe Game do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'X'
-        player.make_move(board, '10')
-        player.make_move(board, '11')
-        player.make_move(board, '12')
+        player.make_move(board, 1, 0)
+        player.make_move(board, 1, 1)
+        player.make_move(board, 1, 2)
       end
       it 'changes @winner to X or O' do
-        expect{ game.check_three_in_row(row: true, start_x: 1) }.to change { game.instance_variable_get(:@winner) }
+        game.check_three_in_row(row: true, start_x: 1)
+        expect(game.instance_variable_get(:@winner)).to eq('X')
       end
     end
     
@@ -67,12 +68,13 @@ describe Game do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'X'
-        player.make_move(board, '00')
-        player.make_move(board, '10')
-        player.make_move(board, '20')
+        player.make_move(board, 0, 0)
+        player.make_move(board, 1, 0)
+        player.make_move(board, 2, 0)
       end
       it 'changes @winner to X or O' do
-        expect{ game.check_three_in_row(column: true) }.to change { game.instance_variable_get(:@winner) }
+        game.check_three_in_row(column: true)
+        expect(game.instance_variable_get(:@winner)).to eq('X')
       end 
     end
 
@@ -86,12 +88,13 @@ describe Game do
       before do
         board = game.instance_variable_get(:@board)
         player = Player.new 'O'
-        player.make_move(board, '00')
-        player.make_move(board, '11')
-        player.make_move(board, '22')
+        player.make_move(board, 0, 0)
+        player.make_move(board, 1, 1)
+        player.make_move(board, 2, 2)
       end
       it 'changes @winner to X or O' do
-        expect{ game.check_three_in_row(diagonal_left: true) }.to change { game.instance_variable_get(:@winner) }
+        game.check_three_in_row(diagonal_left: true)
+        expect(game.instance_variable_get(:@winner)).to eq('O')
       end
     end
 
@@ -116,6 +119,34 @@ describe Board do
       end
     end
   end
+
+  describe '.validate_input' do
+    context 'when a player chooses an occupied spot' do
+      it 'returns false' do
+        player = Player.new 'X'
+        player.make_move(game_board, 0, 0)
+        row = 0
+        column = 0
+        expect(game_board.validate_input(row, column)).to eq(false)
+      end
+    end
+
+    context 'when a player chooses a spot off the board' do
+      it 'returns false' do
+        row = 3 
+        column = 3
+        expect(game_board.validate_input(row, column)).to eq(false)
+      end
+    end
+
+    context 'when a plyer chooses an empty spot' do
+      it 'returns true' do
+        row = 0
+        column = 0
+        expect(game_board.validate_input(row, column)).to eq(true)
+      end
+    end
+  end
 end
 
 describe Player do
@@ -126,12 +157,11 @@ describe Player do
       it 'calls .place_token on board object' do
         board = instance_double('Board')
         symbol = player.instance_variable_get(:@symbol)
-        coordinates = '01'
         row = 0
         column = 1
 
         expect(board).to receive(:place_token).with(symbol, row, column)
-        player.make_move board, coordinates
+        player.make_move board, row, column
       end
     end
   end
